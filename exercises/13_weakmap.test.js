@@ -1,33 +1,45 @@
 test('has a set method', () => {
-  const key = {name: 'Aaron'}
-  const value = {twitter: '@js_dev', gplus: '+AaronFrost'}
-  // Create a new WeakMap called 'myMap'
-  // Add a new entry. Use key as the key and values as the value
-  expect(myMap.has(key)).toBe(true)
+    const key = { name: 'Aaron' }
+    const value = { twitter: '@js_dev', gplus: '+AaronFrost' }
+    // Create a new WeakMap called 'myMap'
+    // Add a new entry. Use key as the key and values as the value
+    const myMap = new WeakMap();
+
+    myMap.set(key, value);
+
+    expect(myMap.has(key)).toBe(true)
 })
 
 test(`should enable private members in classes`, () => {
-  // If you make it this far, write a class with private member variables, using WeakMaps
-  class Person {
-    constructor(name, age) {
-      this._name = name
-      this._age = age
+    // If you make it this far, write a class with private member variables, using WeakMaps
+
+    const members = new WeakMap();
+
+    //https://javascript.plainenglish.io/weakmaps-illustrated-8169ce4764bb
+
+    //add properties to the weakmap to let gc do its thing when the person
+    //instance which is used as the key are no longer being used (no variables
+    //referencing to it)
+
+    class Person {
+        constructor(name, age) {
+            members.set(this, { name, age });
+        }
+
+        getName() {
+            return members.get(this).name;
+        }
+
+        getAge() {
+            return members.get(this).age;
+        }
     }
 
-    getName() {
-      return this._name
-    }
-
-    getAge() {
-      return this._age
-    }
-  }
-
-  const person = new Person('Kent C. Dodds', 26)
-  expect(person._name).toBeUndefined()
-  expect(person.getName()).toBe('Kent C. Dodds')
-  expect(person._age).toBeUndefined()
-  expect(person.getAge()).toBe(26)
+    const person = new Person('Kent C. Dodds', 26)
+    expect(person._name).toBeUndefined()
+    expect(person.getName()).toBe('Kent C. Dodds')
+    expect(person._age).toBeUndefined()
+    expect(person.getAge()).toBe(26)
 })
 
 //////// Elaboration & Feedback /////////
@@ -35,8 +47,8 @@ test(`should enable private members in classes`, () => {
 http://ws.kcd.im/?ws=ES6+and+Beyond&e=WeakMaps&em=
 */
 test('I submitted my elaboration and feedback', () => {
-  const submitted = false // change this when you've submitted!
-  expect(true).toBe(submitted)
+    const submitted = true // change this when you've submitted!
+    expect(true).toBe(submitted)
 })
 ////////////////////////////////
 

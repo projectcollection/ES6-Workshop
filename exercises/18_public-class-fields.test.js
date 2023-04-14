@@ -1,36 +1,31 @@
 test('public class fields help us avoid .bind-ing everything', () => {
-  class FakeReactComponent {
-    constructor(props) {
-      this.props = props
-      this.setState = () => {} // just for fun
+    class FakeReactComponent {
+        constructor(props) {
+            this.props = props
+            this.setState = () => { } // just for fun
+        }
     }
-  }
 
-  class MyComponent extends FakeReactComponent {
-    constructor(...args) {
-      super(...args)
-      // we don't want to have to do this...
-      this.handleClick = this.handleClick.bind(this) // sad :-(
+    class MyComponent extends FakeReactComponent {
+        // convert this to a public class field so it's autobound
+        handleClick = ({ target: { value } }) => {
+            this.props.onClick(value)
+        }
+        render() {
+            // weird JSX stuff here
+        }
+        // this is just so we can test things out
+        testClick(value) {
+            const fakeEvent = { target: { value } }
+            this.handleClick(fakeEvent)
+        }
     }
-    // convert this to a public class field so it's autobound
-    handleClick({target: {value}}) {
-      this.props.onClick(value)
-    }
-    render() {
-      // weird JSX stuff here
-    }
-    // this is just so we can test things out
-    testClick(value) {
-      const fakeEvent = {target: {value}}
-      this.handleClick(fakeEvent)
-    }
-  }
 
-  const onClick = jest.fn()
-  const myComponent = new MyComponent({onClick})
-  myComponent.testClick('hello world')
-  expect(onClick).toHaveBeenCalledTimes(1)
-  expect(onClick).toHaveBeenCalledWith('hello world')
+    const onClick = jest.fn()
+    const myComponent = new MyComponent({ onClick })
+    myComponent.testClick('hello world')
+    expect(onClick).toHaveBeenCalledTimes(1)
+    expect(onClick).toHaveBeenCalledWith('hello world')
 })
 
 //////// Elaboration & Feedback /////////
@@ -38,8 +33,8 @@ test('public class fields help us avoid .bind-ing everything', () => {
 http://ws.kcd.im/?ws=ES6+and+Beyond&e=Public+Class+Fields&em=
 */
 test('I submitted my elaboration and feedback', () => {
-  const submitted = false // change this when you've submitted!
-  expect(true).toBe(submitted)
+    const submitted = true // change this when you've submitted!
+    expect(true).toBe(submitted)
 })
 ////////////////////////////////
 

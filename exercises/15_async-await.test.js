@@ -1,33 +1,32 @@
 // Rewrite all of these from promises to async/await
 // tip: you can turn the `it` callbacks to async functions by adding `async` to them :)
 test('should work with resolved promises', async () => {
-  return doAsync().then(result => {
+    const result = await doAsync();
+
     expect(result).toBe('resolved')
-    throw new Error(
-      'convert this to an async/await function and remove this error',
-    )
-  })
+    return true;
 })
 
 test('should throw an error with a rejected promise', async () => {
-  return doAsync(true).catch(error => {
-    expect(error).toBe('rejected')
-    throw new Error(
-      'convert this to an async/await function and remove this error',
-    )
-  })
+
+    try {
+        doAsync(true);
+    } catch(error) {
+        expect(error.message).toBe('rejected')
+    }
+    return true;
 })
 
 function doAsync(rejectPromise = false) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (rejectPromise) {
-        reject('rejected')
-      } else {
-        resolve('resolved')
-      }
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            if (rejectPromise) {
+                reject('rejected')
+            } else {
+                resolve('resolved')
+            }
+        })
     })
-  })
 }
 
 //////// Elaboration & Feedback /////////
@@ -35,8 +34,8 @@ function doAsync(rejectPromise = false) {
 http://ws.kcd.im/?ws=ES6+and+Beyond&e=Async/Await&em=
 */
 test('I submitted my elaboration and feedback', () => {
-  const submitted = false // change this when you've submitted!
-  expect(true).toBe(submitted)
+    const submitted = true // change this when you've submitted!
+    expect(true).toBe(submitted)
 })
 ////////////////////////////////
 
